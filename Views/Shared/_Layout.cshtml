@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApplication8</title>
+    <title>@ViewData["Title"] - WebApplication10</title>
 </head>
 <body>
     <header>
-        <nav style="margin: 20px 0;">
-            <a style="margin: 0 20px;" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            <a style="margin: 0 20px;" href="/My">My</a>
-            <a style="margin: 0 20px;" href="/Weather">Weather</a>
+        <a asp-area="" asp-controller="Home" asp-action="Index">WebApplication10</a>
+        <nav>
+            <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </nav>
     </header>
     <div class="container">
@@ -21,7 +21,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - WebApplication8 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2022 - WebApplication10 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     @await RenderSectionAsync("Scripts", required: false)

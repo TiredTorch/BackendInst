@@ -1,43 +1,62 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Diagnostics;
-using WebApplication8.Models;
+using WebApplication10.Models;
 
-namespace WebApplication8.Controllers
+namespace WebApplication10.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private static List<Product> products = new List<Product>();
-
+        public Consultation Consult;
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
-
         [HttpGet]
         public IActionResult Index()
         {
-            return View(products.Count);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Index(Product product)
+        public string Index(Consultation consultation)
         {
-            product.Id = products.Count;
-            products.Add(product);
-            return View(products.Count);
+            if (consultation.Date < DateTime.Now)
+            {
+                ModelState.AddModelError("", "Дата повинна бути у майбутньому.");
+            }
+            if (consultation.Date.DayOfWeek == DayOfWeek.Saturday || consultation.Date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                ModelState.AddModelError("", "Дата повинна бути не вихідний.");
+            }
+            if (consultation.Subject == "Основи" && consultation.Date.DayOfWeek == DayOfWeek.Monday)
+            {
+                ModelState.AddModelError("", "Дата повинна бути не Понеділок.");
+            }
+            if (ModelState.IsValid) {
+                return $@"{consultation.Name} - {consultation.Email} - {consultation.Subject} - {consultation.Date}";
+            }
+
+            string errorMessages = "";
+            foreach (var item in ModelState)
+            {
+                if (item.Value.ValidationState == ModelValidationState.Invalid)
+                {
+                    errorMessages = $"{errorMessages}\nПомилки властивості {item.Key}:\n";
+                    foreach (var error in item.Value.Errors)
+                    {
+                        errorMessages = $"{errorMessages}{error.ErrorMessage}\n";
+                    }
+                }
+            }
+            return errorMessages;
         }
 
-        [HttpPost]
-        public IActionResult ViewProductsAsList()
+        public IActionResult Privacy()
         {
-            return View("Products", products);
-        }
-
-        [HttpPost]
-        public IActionResult ViewProductsAsTable()
-        {
-            return View("ProductsTable", products);
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
